@@ -1,0 +1,79 @@
+DATASET NOTES — BadmintonAI v0.1
+================================
+Last updated: Summer 2025
+
+SOURCES
+-------
+1. Victor Axelsen — BWF match footage
+   URL: https://www.youtube.com/watch?v=gmXVbt-AC8o
+   Angle: Low side-on fixed camera
+   Frames labeled: 63
+   Notes: Aggressive player, heavy on smashes and net shots.
+          Good for smash/backhand/net examples.
+
+2. Kento Momota — highlight reel
+   URL: https://www.youtube.com/watch?v=UZ2mynjp0yY
+   Angle: Low side-on fixed camera (same style)
+   Frames labeled: 41
+   Notes: Defensive/technical player. Used specifically to
+          supplement drop and clear examples.
+
+LABELING METHODOLOGY
+--------------------
+- One frame labeled per shot — specifically the frame immediately
+  BEFORE shuttle contact (pre-contact body position)
+- Near-side player only (far player keypoints too noisy)
+- Timestamps identified using custom Colab frame scrubber tool
+- Labels assigned by manual visual inspection
+
+LABEL DISTRIBUTION (final)
+--------------------------
+net_shot:       24
+smash:          22
+backhand:       17
+backhand_serve: 14
+drop:           16
+clear:          11
+TOTAL:         104
+
+KNOWN ISSUES & LIMITATIONS
+---------------------------
+* Backhands lumped into one category regardless of shot type
+  (backhand drop, backhand clear, backhand drive all = 'backhand')
+  Reason: insufficient examples to split further at v0.1
+
+* 'net_shot' is a broad category — includes net kills, net lifts,
+  and gentle net drops. First refinement target for v0.2.
+
+* Smash and drop look very similar at the contact frame.
+  The main visual difference is shuttle behavior post-contact,
+  not player body position. Low accuracy expected on drop.
+  Fix: sequence-based features (5-frame windows) in v0.2.
+
+* Model is angle-specific — raw x/y keypoints are not
+  viewpoint-invariant. Retraining required for different camera angles.
+  Fix: convert to joint angles (rotation-invariant) in v0.3.
+
+* Dataset biased toward two players (Axelsen + Momota).
+  Generalization to other players' mechanics is uncertain.
+  Fix: add 3+ more players in v0.2 dataset expansion.
+
+* Amateur footage not yet tested. Pipeline likely to break on:
+  - Different camera angles
+  - Worse lighting
+  - Lower resolution
+  - Closer camera distance (player fills more of frame)
+
+FUTURE LABELING PRIORITIES
+---------------------------
+v0.2:
+- Expand to 300+ total frames
+- Add 3+ more players (suggest: Lee Zii Jia for variety)
+- Split 'backhand' into backhand_drop, backhand_clear, backhand_drive
+- Split 'net_shot' into net_kill, net_lift, net_drop
+- Switch to 5-frame sequence labeling around contact point
+
+v0.3:
+- Label amateur footage separately for transfer learning
+- Add court position as feature (not just side, but depth)
+- Label shot outcomes (point won/lost) for recommendation training

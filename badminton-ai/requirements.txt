@@ -1,0 +1,12 @@
+ultralytics
+roboflow
+opencv-python
+scikit-learn
+pandas
+numpy
+joblib
+torch
+torchvision
+yt-dlp
+ipywidgets
+Pillow
